@@ -123,6 +123,11 @@ h1, h2, h3, h4 {
   justify-content: space-between;
   gap: 32px;
   height: 92px;
+  max-width: 1560px; /* wider than the site's normal 1240px content container —
+    the 8-item nav (some two-word labels) needs the extra room to avoid
+    overflowing into the logo/CTA on either side. Paired with the 1520px nav
+    breakpoint in responsive.css — verified by width budget (see comment
+    there), not just eyeballed, since this has broken before. */
 }
 
 .logo { display: flex; align-items: center; gap: 12px; min-width: 0; }
@@ -149,12 +154,12 @@ h1, h2, h3, h4 {
 .logo-text small { font-size: 0.65rem; color: var(--gold-light); letter-spacing: 0.5px; margin-top: 3px; }
 
 .main-nav { flex: 1; display: flex; justify-content: center; min-width: 0; }
-.main-nav ul { display: flex; align-items: center; gap: clamp(14px, 2vw, 28px); }
+.main-nav ul { display: flex; align-items: center; gap: clamp(10px, 1.3vw, 22px); }
 .main-nav a {
   color: var(--white);
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   font-weight: 600;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
   text-transform: uppercase;
   white-space: nowrap;
   display: flex;
@@ -163,7 +168,6 @@ h1, h2, h3, h4 {
   padding: 34px 0;
   position: relative;
 }
-.main-nav a i { font-size: 0.65rem; }
 .main-nav a.active,
 .main-nav a:hover { color: var(--gold); }
 .main-nav a.active::after {
@@ -175,67 +179,6 @@ h1, h2, h3, h4 {
   height: 2px;
   background: var(--gold);
 }
-
-.has-dropdown { position: relative; }
-.dropdown {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  min-width: 230px;
-  background: var(--white);
-  box-shadow: 0 18px 40px rgba(0,0,0,0.18);
-  padding: 10px 0;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(8px);
-  transition: all var(--transition);
-  border-top: 2px solid var(--gold);
-}
-.has-dropdown:hover .dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
-.dropdown li a {
-  color: var(--text);
-  padding: 11px 22px;
-  text-transform: none;
-  font-weight: 500;
-  letter-spacing: 0;
-  white-space: normal;
-}
-.dropdown li a:hover { background: var(--off-white); color: var(--gold); }
-
-/* Mega dropdown — for nav items with a long list of sub-services
-   (Security Services, Cleaning Services). Centered on the viewport (fixed),
-   not under the trigger link, so it never runs off-screen regardless of
-   where the trigger sits in the nav. Each `.mega-col` is an explicit,
-   hand-grouped list in the HTML (rather than relying on CSS Grid/multi-column
-   auto-flow, which distributes items by estimated height and can misplace
-   multi-line entries) — so the column groupings always match the reference
-   design exactly. `.mega-col` uses `grid-template-rows: subgrid` so every
-   column shares the SAME row-height tracks: when one column's label wraps to
-   two lines, every other column's row at that position grows to match, instead
-   of each column stacking independently and drifting out of alignment. */
-.dropdown.mega {
-  position: fixed;
-  top: 92px;
-  left: 50%;
-  translate: -50% 0;
-  width: 720px;
-  max-width: 92vw;
-  z-index: 1001;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(4, auto);
-  column-gap: 6px;
-  row-gap: 2px;
-  padding: 22px;
-}
-.dropdown.mega .mega-col {
-  grid-row: 1 / span 4;
-  display: grid;
-  grid-template-rows: subgrid;
-  row-gap: 2px;
-  min-width: 0;
-}
-.dropdown.mega li a { padding: 10px 12px; border-radius: 3px; line-height: 1.3; display: flex; align-items: center; height: 100%; }
 
 .header-actions { display: flex; align-items: center; gap: 18px; }
 .icon-btn { color: var(--white); display: flex; }
@@ -487,6 +430,7 @@ h1, h2, h3, h4 {
   grid-template-columns: repeat(3, 1fr);
   gap: 32px;
 }
+.value-grid.cols-4 { grid-template-columns: repeat(4, 1fr); gap: 26px; }
 .value-card { text-align: center; padding: 8px; }
 .value-card .icon-box { margin: 0 auto 20px; }
 .value-card h3 { font-size: 1.15rem; margin-bottom: 10px; text-transform: uppercase; }
@@ -543,8 +487,22 @@ h1, h2, h3, h4 {
   transition: border-color var(--transition);
 }
 .contact-form input:focus,
-.contact-form textarea:focus { outline: none; border-color: var(--gold); }
+.contact-form textarea:focus,
+.contact-form select:focus { outline: none; border-color: var(--gold); }
 .contact-form textarea { resize: vertical; min-height: 130px; }
+.contact-form select {
+  width: 100%;
+  border: 1.5px solid var(--border);
+  padding: 13px 16px;
+  font-size: 0.95rem;
+  color: var(--text);
+  background: var(--white);
+  transition: border-color var(--transition);
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%236b6b6b' d='M4 6l4 4 4-4z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+}
 .form-success {
   padding: 20px 24px;
   background: var(--off-white);
@@ -553,6 +511,106 @@ h1, h2, h3, h4 {
 }
 
 .map-placeholder { aspect-ratio: 16/6; margin-top: 60px; }
+
+/* Trust badges bar — sits directly under the hero */
+.trust-bar { background: var(--off-white); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.trust-bar-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 12px 30px;
+  padding: 22px 0;
+  text-align: center;
+}
+.trust-bar-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+}
+.trust-bar-item i { color: var(--gold); }
+
+/* Core service pillars (homepage) */
+.pillar-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.pillar-card {
+  background: var(--off-white);
+  border: 1px solid var(--border);
+  padding: 36px 32px;
+  transition: all var(--transition);
+}
+.pillar-card:hover { border-color: var(--gold); transform: translateY(-4px); }
+.pillar-card .icon-box { margin-bottom: 22px; }
+.pillar-card h3 { font-size: 1.2rem; text-transform: uppercase; margin-bottom: 12px; }
+.pillar-card > p { color: var(--gray); font-size: 0.92rem; margin-bottom: 20px; }
+.pillar-card .feature-list { margin-top: 0; margin-bottom: 24px; }
+.pillar-card .feature-list li { font-size: 0.88rem; }
+.pillar-card .feature-list i { width: 22px; height: 22px; font-size: 0.7rem; }
+.pillar-card .btn-sm { width: 100%; justify-content: center; }
+
+/* Service module cards (Security Solutions / Cleaning & Hygiene pages) */
+.module-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.module-card {
+  position: relative;
+  background: var(--white);
+  border: 1px solid var(--border);
+  padding: 34px 30px;
+  transition: all var(--transition);
+}
+.module-card:hover { border-color: var(--gold); box-shadow: 0 18px 40px rgba(0,0,0,0.08); }
+.module-number {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 0.78rem;
+  letter-spacing: 1px;
+  color: var(--gold);
+  margin-bottom: 16px;
+  display: block;
+}
+.module-card h3 { font-size: 1.1rem; text-transform: uppercase; margin-bottom: 12px; }
+.module-card p { color: var(--gray); font-size: 0.9rem; }
+
+/* Manpower categories (Facility Management page) */
+.manpower-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+.manpower-card {
+  background: var(--off-white);
+  border: 1px solid var(--border);
+  padding: 32px;
+}
+.manpower-card .icon-box { margin-bottom: 18px; }
+.manpower-card h3 { font-size: 1.1rem; text-transform: uppercase; margin-bottom: 10px; }
+.manpower-card p { color: var(--gray); font-size: 0.92rem; }
+
+/* Sectors served page */
+.sector-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.sector-card {
+  text-align: center;
+  padding: 40px 28px;
+  border: 1px solid var(--border);
+  transition: all var(--transition);
+}
+.sector-card:hover { border-color: var(--gold); transform: translateY(-4px); }
+.sector-card .icon-box { margin: 0 auto 20px; }
+.sector-card h3 { font-size: 1.1rem; text-transform: uppercase; margin-bottom: 10px; }
+.sector-card p { color: var(--gray); font-size: 0.9rem; }
 
 /* ==========================================================================
    FOOTER
