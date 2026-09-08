@@ -41,14 +41,14 @@
   "description": "Security guarding, commercial cleaning, and facility manpower services across Delhi NCR and Bengaluru.",
   "address": {
     "@type": "PostalAddress",
-    "streetAddress": "250, Sant Nagar, East of Kailash",
+    "streetAddress": "C-37, Ground Floor, East of Kailash",
     "addressLocality": "New Delhi",
     "addressRegion": "Delhi",
     "postalCode": "110065",
     "addressCountry": "IN"
   },
   "telephone": "+91-98100-12345",
-  "email": "jmjsanu@gmail.com",
+  "email": "info@jmjenterprisessolutions.com",
   "openingHoursSpecification": {
     "@type": "OpeningHoursSpecification",
     "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
@@ -128,7 +128,7 @@
               <span class="icon-box round"><i class="fa-solid fa-building"></i></span>
               <div>
                 <h4>Headquarters</h4>
-                <p>250, Sant Nagar, East of Kailash, New Delhi &ndash; 110065, India</p>
+                <p>C-37, Ground Floor, East of Kailash, New Delhi &ndash; 110065</p>
               </div>
             </div>
             <div class="contact-info-card">
@@ -142,7 +142,7 @@
               <span class="icon-box round"><i class="fa-solid fa-envelope"></i></span>
               <div>
                 <h4>Official Inquiries</h4>
-                <p>jmjsanu@gmail.com</p>
+                <p>info@jmjenterprisessolutions.com</p>
               </div>
             </div>
             <div class="contact-info-card">
@@ -170,13 +170,13 @@
             </div>
             <div>
               <label for="email">Corporate Email Address</label>
-              <input type="email" id="email" name="email" placeholder="you@company.com" required />
+              <input type="email" id="email" name="email" placeholder="you@company.com" pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$" title="Please enter a valid email address (e.g., name@domain.com)" required />
             </div>
           </div>
           <div class="form-row">
             <div>
               <label for="phone">Phone Number</label>
-              <input type="tel" id="phone" name="phone" placeholder="+91 00000 00000" required />
+              <input type="tel" id="phone" name="phone" placeholder="+91 00000 00000" pattern="^(\+91[\-\s]?)?[6789]\d{9}$" title="Please enter a valid 10-digit Indian phone number (e.g., +91 9876543210)" required />
             </div>
             <div>
               <label for="city">City / Facility Location</label>
@@ -185,7 +185,7 @@
           </div>
           <div>
             <label for="service">Service Required</label>
-            <select id="service" name="service">
+            <select id="service" name="service" required title="Please select a service requirement">
               <option value="">Select a service&hellip;</option>
               <option value="security">Security Services</option>
               <option value="cleaning">Commercial Cleaning</option>
@@ -206,8 +206,8 @@
       <div class="container">
         <iframe
           class="map-placeholder"
-          src="https://maps.google.com/maps?q=250,+Sant+Nagar,+East+of+Kailash,+New+Delhi+-+110065,+India&output=embed"
-          title="JMJ Enterprises Solutions &mdash; 250, Sant Nagar, East of Kailash, New Delhi"
+          src="https://maps.google.com/maps?q=C-37,+Ground+Floor,+East+of+Kailash,+New+Delhi+-+110065,+India&output=embed"
+          title="JMJ Enterprises Solutions &mdash; C-37, Ground Floor, East of Kailash, New Delhi"
           loading="lazy"
           referrerpolicy="no-referrer-when-downgrade"
         ></iframe>
@@ -241,8 +241,8 @@
         <h4>Contact</h4>
         <ul class="footer-contact">
           <li><i class="fa-solid fa-phone"></i> +91 98100 12345</li>
-          <li><i class="fa-solid fa-envelope"></i> jmjsanu@gmail.com</li>
-          <li><i class="fa-solid fa-location-dot"></i> 250, Sant Nagar, East of Kailash, New Delhi &ndash; 110065, India</li>
+          <li><i class="fa-solid fa-envelope"></i> info@jmjenterprisessolutions.com</li>
+          <li><i class="fa-solid fa-location-dot"></i> C-37, Ground Floor, East of Kailash, New Delhi &ndash; 110065</li>
         </ul>
       </div>
 
@@ -276,6 +276,7 @@
   <script src="assets/js/navbar.js"></script>
   <script src="assets/js/slider.js"></script>
   <script src="assets/js/animations.js"></script>
+  <script src="assets/js/config.js"></script>
   <script src="assets/js/main.js"></script>
 </body>
 </html>

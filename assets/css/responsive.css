@@ -1,32 +1,10 @@
 /* ==========================================================================
-   NAV BREAKPOINT (max-width: 1520px)
-   Separate from the general tablet content breakpoint below — the 8-item nav
-   (Home / About Us / Security Solutions / Cleaning & Hygiene / Facility
-   Management / Sectors Served / Gallery / Contact Us — several two-word
-   labels) needs more room than the 1024px tablet cutoff gives it, so it
-   switches to the off-canvas hamburger menu on its own, earlier breakpoint
-   instead of fighting for space and overflowing into the logo/CTA button
-   (this broke twice already — once as a symmetric overflow around the
-   centered nav, once again when Gallery was added back as an 8th item).
-
-   The 1520px value isn't arbitrary — it's sized from an actual width budget,
-   not eyeballed:
-     nav text (8 items, 0.78rem bold uppercase) ≈ 740px
-     + 7 gaps between items                     ≈ 140px
-     ────────────────────────────────────────────────────
-     nav content needed                         ≈ 880px
-
-     header-inner available at the 1521px edge (max-width 1560px in
-     style.css, so viewport-limited here) minus its 48px padding, minus the
-     logo (~216px), the header actions/CTA button (~244px), and the two
-     32px gaps around the nav (~64px) ≈ 949px available
-
-   ≈ 69px of margin at the breakpoint's edge. If you add/rename a nav item,
-   re-run this budget (or just test at ~1520–1560px viewport width) before
-   assuming it still fits — it has silently broken from under-budgeting
-   before.
+   NAV BREAKPOINT (max-width: 1024px)
+   Below 1024px (tablets and smaller) the nav collapses into an off-canvas
+   hamburger menu. On all standard desktop and laptop screens (≥ 1025px)
+   the navigation links are shown inline in the top bar.
    ========================================================================== */
-@media (max-width: 1520px) {
+@media (max-width: 1024px) {
   .main-nav {
     position: fixed;
     top: 92px;
@@ -44,7 +22,15 @@
   .main-nav.open { left: 0; }
   .main-nav ul { flex-direction: column; align-items: flex-start; gap: 0; width: 100%; }
   .main-nav ul > li { width: 100%; border-bottom: 1px solid rgba(255,255,255,0.08); }
-  .main-nav a { padding: 18px 0; width: 100%; justify-content: space-between; white-space: normal; font-size: 0.85rem; }
+  .main-nav a {
+    padding: 18px 0;
+    width: 100%;
+    max-width: none;          /* cancel desktop 88px cap */
+    text-align: left;         /* left-align in slide-out menu */
+    justify-content: flex-start;
+    white-space: nowrap;      /* keep each item on one line */
+    font-size: 0.85rem;
+  }
   .main-nav a.active::after { display: none; }
 
   .header-actions .btn-sm span { display: none; }

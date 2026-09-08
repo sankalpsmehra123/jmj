@@ -31,10 +31,12 @@ jmj_website/
 │   │   └── responsive.css       ← tablet / mobile / small-mobile breakpoints
 │   │
 │   ├── js/
+│   │   ├── config.js            ← configuration variables (Google Sheets URL)
 │   │   ├── main.js              ← sticky header, smooth scroll, footer year, contact form
 │   │   ├── navbar.js            ← mobile hamburger toggle
 │   │   ├── slider.js            ← client-logo strip prev/next scroller
-│   │   └── animations.js        ← scroll-triggered fade/slide-up reveals
+│   │   ├── animations.js        ← scroll-triggered fade/slide-up reveals
+│   │   └── gallery.js           ← dynamic gallery image loader
 │   │
 │   └── images/
 │       ├── logo.jpeg            ← real JMJ logo (in place)
@@ -106,9 +108,8 @@ commented-out `<img>` tag directly above it. Concretely:
 | Section                        | Drop the photo here                          | Suggested filename            |
 |----------------------------------|-----------------------------------------------|--------------------------------|
 | Hero (homepage, right side)      | `assets/images/hero/`                        | `security-hero.jpg`           |
-| Client logos (Max, DLF, ...)     | `assets/images/clients/`                     | `max-healthcare.png`, etc.    |
 | About page team photo            | `assets/images/about/`                       | `about-team.jpg`              |
-| Gallery page (if you re-link it) | `assets/images/gallery/`                     | anything                      |
+| Gallery page (if you re-link it) | `assets/images/gallery/`                     | `gallery-1.jpg`, `gallery-2.jpg`, etc. (MUST follow `gallery-<number>.jpg` format) |
 | Contact page map                 | n/a — replace the placeholder `<div>` with a real Google Maps `<iframe>` embed | — |
 
 For each spot, the HTML has a comment right above the placeholder showing the
@@ -126,12 +127,6 @@ exact `<img>` tag to uncomment/use, e.g.:
 ```
 
 Just paste in the `<img>` tag from the comment and delete the placeholder `<div>`.
-
-The **client logos** section (Max Healthcare, DLF, Radisson, Crowne Plaza,
-Amity) is built as styled text + Font Awesome icons rather than images, since
-no client logo files exist yet. If you get permission to use the real client
-logo marks, swap each `<span class="client-logo">…</span>` for an
-`<img src="assets/images/clients/…" alt="…" />` instead.
 
 ## Logo
 
@@ -162,8 +157,73 @@ gold** — using CSS variables defined at the top of `assets/css/style.css`:
 - Decide on the PSARA badge, ISO certification icons, and professional domain
   email once those are actually confirmed/available, then add them in
 - Wire up the contact form (`contact.html`) to an actual email or backend
-  endpoint — right now `assets/js/main.js` just intercepts the submit and shows
-  a client-side "thanks" message, nothing is actually sent anywhere
-- Replace the client-logo text marks with real logos once you have permission
-  to use them (see "Where to add images" above)
+  endpoint (DONE! Uses Google Apps Script - see setup instructions below)
+- Replace the client-logo text marks with real logos (DONE!)
 - Decide whether to re-link `gallery.html` somewhere, or remove it entirely
+
+## Google Sheets & Email Notifications Setup
+
+To log your website's contact form submissions directly into a Google Sheet and receive email notifications, follow these simple steps to create a free Google Apps Script Web App.
+
+### Step 1: Prepare the Google Sheet
+1. Go to [Google Sheets](https://sheets.google.com) and create a **Blank spreadsheet**.
+2. Name the spreadsheet (e.g., "JMJ Website Leads").
+3. In the first row, add these headers to Columns A through G:
+   `Timestamp`, `Name`, `Email`, `Phone`, `City`, `Service`, `Message`
+
+### Step 2: Add the Code
+1. In your Google Sheet menu, click **Extensions** > **Apps Script**.
+2. Delete any code in the editor and paste the following script:
+
+```javascript
+function doPost(e) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var rowData = [];
+  
+  // 1. Map incoming form fields to columns
+  rowData.push(new Date()); // Column A: Timestamp
+  rowData.push(e.parameter.name || ""); // Column B: Name
+  rowData.push(e.parameter.email || ""); // Column C: Email
+  rowData.push(e.parameter.phone || ""); // Column D: Phone
+  rowData.push(e.parameter.city || ""); // Column E: City
+  rowData.push(e.parameter.service || ""); // Column F: Service
+  rowData.push(e.parameter.message || ""); // Column G: Message
+
+  sheet.appendRow(rowData);
+  
+  // 2. Send Email Notification
+  // Replace the email and subject below with where you want to receive the notifications
+  var targetEmail = "<Email_Id>"; 
+  var subject = "JMJ Website New Lead: " + (e.parameter.name || "Visitor");
+  var emailBody = "You have a new contact form submission!\n\n" +
+                  "Name: " + (e.parameter.name || "") + "\n" +
+                  "Email: " + (e.parameter.email || "") + "\n" +
+                  "Phone: " + (e.parameter.phone || "") + "\n" +
+                  "City: " + (e.parameter.city || "") + "\n" +
+                  "Service: " + (e.parameter.service || "") + "\n\n" +
+                  "Message:\n" + (e.parameter.message || "");
+                  
+  MailApp.sendEmail(targetEmail, subject, emailBody);
+  
+  // 3. Return success response to the website
+  return ContentService.createTextOutput(JSON.stringify({ "result": "success" }))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+```
+3. Click the **Save** icon (floppy disk) at the top.
+
+### Step 3: Deploy the Web App
+1. Click the blue **Deploy** button at the top right, then select **New deployment**.
+2. Click the gear icon ⚙️ next to "Select type" and choose **Web app**.
+3. Fill out the deployment details:
+   - **Description**: Website Form Logging
+   - **Execute as**: Me (your email)
+   - **Who has access**: **Anyone** *(Important: Must be "Anyone")*
+4. Click **Deploy**.
+5. *Note: Google will ask you to "Authorize access". Click it, select your Google account, click "Advanced", and click "Go to Untitled project (unsafe)". Allow the permissions.*
+6. You will be given a **Web app URL** (starts with `https://script.google.com/...`). Copy this URL!
+
+### Step 4: Link it to Your Website
+Open `assets/js/config.js` in your code editor and paste the Web app URL between the quotes for `googleSheetUrl`.
+
+That's it! Now every time someone submits a form on your website, a new row will instantly appear in your Google Sheet, AND your Google Apps Script will automatically send you an email notification.

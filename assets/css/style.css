@@ -121,13 +121,8 @@ h1, h2, h3, h4 {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 32px;
+  gap: 16px;
   height: 92px;
-  max-width: 1560px; /* wider than the site's normal 1240px content container —
-    the 8-item nav (some two-word labels) needs the extra room to avoid
-    overflowing into the logo/CTA on either side. Paired with the 1520px nav
-    breakpoint in responsive.css — verified by width budget (see comment
-    there), not just eyeballed, since this has broken before. */
 }
 
 .logo { display: flex; align-items: center; gap: 12px; min-width: 0; }
@@ -154,18 +149,23 @@ h1, h2, h3, h4 {
 .logo-text small { font-size: 0.65rem; color: var(--gold-light); letter-spacing: 0.5px; margin-top: 3px; }
 
 .main-nav { flex: 1; display: flex; justify-content: center; min-width: 0; }
-.main-nav ul { display: flex; align-items: center; gap: clamp(10px, 1.3vw, 22px); }
+.main-nav ul { display: flex; align-items: center; gap: clamp(6px, 0.9vw, 14px); }
 .main-nav a {
   color: var(--white);
-  font-size: 0.78rem;
+  font-size: 0.7rem;
   font-weight: 600;
   letter-spacing: 0.3px;
   text-transform: uppercase;
-  white-space: nowrap;
+  white-space: normal;
+  overflow-wrap: normal;
+  text-align: center;
+  max-width: 88px;
+  line-height: 1.25;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
-  padding: 34px 0;
+  padding: 28px 0;
   position: relative;
 }
 .main-nav a.active,
@@ -173,7 +173,7 @@ h1, h2, h3, h4 {
 .main-nav a.active::after {
   content: "";
   position: absolute;
-  bottom: 30px;
+  bottom: 22px;
   left: 0;
   width: 100%;
   height: 2px;
@@ -341,6 +341,7 @@ h1, h2, h3, h4 {
 .client-logo.serif { font-family: Georgia, serif; font-style: italic; }
 .client-logo span { font-size: 0.6rem; font-weight: 600; letter-spacing: 1px; color: var(--gray); text-transform: uppercase; }
 .client-logo i { color: var(--gold); margin-right: 6px; }
+.client-logo img { max-height: 60px; width: auto; object-fit: contain; }
 .client-logo:hover { opacity: 1; }
 
 .slider-arrow {
@@ -439,9 +440,40 @@ h1, h2, h3, h4 {
 .gallery-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
+  gap: 16px;
 }
-.gallery-grid .img-placeholder { aspect-ratio: 1/1; }
+.gallery-item {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: 8px;
+  background: var(--off-white);
+}
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease, filter 0.4s ease;
+  cursor: pointer;
+}
+.gallery-item:hover img {
+  transform: scale(1.06);
+  filter: brightness(0.85);
+}
+.gallery-item::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  transition: border-color 0.3s ease;
+  pointer-events: none;
+}
+.gallery-item:hover::after {
+  border-color: var(--gold);
+}
 
 .service-list-grid {
   display: grid;
@@ -702,3 +734,62 @@ h1, h2, h3, h4 {
 
 /* scrolled header state */
 .site-header.scrolled { box-shadow: 0 6px 24px rgba(0,0,0,0.3); }
+
+/* ==========================================================================
+   LIGHTBOX
+   ========================================================================== */
+.lightbox {
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(5px);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.lightbox.show {
+  display: block;
+  opacity: 1;
+}
+.lightbox-content {
+  margin: auto;
+  display: block;
+  max-width: 90%;
+  max-height: 80vh;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 6px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  object-fit: contain;
+}
+.lightbox-close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  color: #fff;
+  font-size: 40px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  z-index: 10000;
+}
+.lightbox-close:hover {
+  color: var(--gold);
+}
+.lightbox-caption {
+  position: absolute;
+  bottom: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  text-align: center;
+  color: #ccc;
+  font-family: var(--font-body);
+  font-size: 1rem;
+}
