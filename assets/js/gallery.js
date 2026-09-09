@@ -30,7 +30,7 @@
           foundInBatch++;
           const div = document.createElement('div');
           div.className = 'gallery-item';
-          div.innerHTML = `<img src="${res.src}" alt="JMJ Enterprises Solutions work photo ${res.idx}" loading="lazy" />`;
+          div.innerHTML = `<img src="${res.src}" alt="JMJ Enterprises Solutions Ltd. work photo ${res.idx}" loading="lazy" />`;
           galleryGrid.appendChild(div);
         }
       });

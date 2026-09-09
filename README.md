@@ -1,6 +1,6 @@
-# JMJ Enterprises Solutions — Website
+# JMJ Enterprises Solutions Ltd. — Website
 
-This is the code for the JMJ Enterprises Solutions website (security, cleaning
+This is the code for the JMJ Enterprises Solutions Ltd. website (security, cleaning
 &amp; facility management). Built with **HTML5 + CSS3 + Vanilla JS + Font
 Awesome (icons) + Google Fonts (Poppins / Inter)** — no build step, no
 framework. Just open `index.html` in a browser, or serve the folder with any
