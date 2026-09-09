@@ -48,6 +48,22 @@
         }
 
         const formData = new FormData(contactForm);
+        
+        // Sanitize inputs to prevent script injection and spreadsheet formula injection
+        for (let [key, value] of formData.entries()) {
+          if (typeof value === 'string') {
+            // Strip out < and > to prevent any HTML/JS tags
+            let sanitized = value.replace(/[<>]/g, '');
+            
+            // Prevent Spreadsheet formula injection by escaping leading special characters
+            if (/^[=+\-@]/.test(sanitized)) {
+              sanitized = "'" + sanitized;
+            }
+            
+            formData.set(key, sanitized);
+          }
+        }
+
         const urlEncodedData = new URLSearchParams(formData);
 
         // Send data directly to Google Apps Script as URL Encoded Data
