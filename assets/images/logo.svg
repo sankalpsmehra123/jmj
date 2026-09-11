@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <circle cx="60" cy="60" r="58" fill="#0a0a0a" stroke="#DFAF24" stroke-width="3"/>
+  <circle cx="60" cy="60" r="49" fill="none" stroke="#DFAF24" stroke-width="1.5"/>
+  <text x="60" y="55" text-anchor="middle" font-family="Poppins, Arial, sans-serif" font-weight="800" font-size="24" fill="#DFAF24">JMJ</text>
+  <text x="60" y="72" text-anchor="middle" font-family="Poppins, Arial, sans-serif" font-weight="600" font-size="8" fill="#F5F5F5" letter-spacing="1">ENTERPRISES</text>
+  <path d="M30 85 Q60 95 90 85" stroke="#DFAF24" stroke-width="1.5" fill="none"/>
+</svg>
